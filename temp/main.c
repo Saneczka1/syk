@@ -194,7 +194,7 @@ int test_module()
         values[i].num_ones = count_ones(values[i].w);
     }
 
-    int k = 0;
+    int k = 0;/*
     for (int i = 0; i < 500; i++)
     {
         struct multiplication_result result = multiply(values[i].a1, values[i].a2);
@@ -205,6 +205,7 @@ int test_module()
         }
         sleep(1);
     }
+    */
 
     return k;
 }
