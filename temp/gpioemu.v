@@ -66,7 +66,7 @@ module gpioemu(n_reset,
         A1 <= 0;
         A2 <= 0;
         L = 0;
-        B = 2'b11;
+        B = 2'b01;
 		done =1'b0;
     end
 	
@@ -99,9 +99,9 @@ always @(posedge srd)
 begin
     if (saddress == 16'h0390) 
 	
-       if (B == 2'b11) begin  //jeszcze sprawdzić to
+     //  if (B == 2'b11) begin  //jeszcze sprawdzić to
 	    sdata_out_s <= W[31:0];
-        end
+     //   end
     
 		else if (saddress == 16'h03A0) 
 		
