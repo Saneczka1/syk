@@ -57,7 +57,7 @@ module gpioemu(n_reset,
         sdata_out_s <= 0;
 		
 		valid =1;
-        state <= 4;
+        state <= IDLE;
         result =49'b0;
 		W = 32'b0;
         tmp_ones_count = 0;
@@ -66,7 +66,7 @@ module gpioemu(n_reset,
         A1 <= 0;
         A2 <= 0;
         L = 0;
-        B = 2'b11;
+        B = 2'b01;
 		done =1'b0;
     end
 	
@@ -79,9 +79,9 @@ module gpioemu(n_reset,
 		begin
 			ready <= 1'b0;
 			done =0;
-			state <=IDLE;
 			valid =1'b1;
 			B = 2'b01;
+			state <= IDLE;
 			gpio_out_s <= gpio_out_s + 1; //licznik
 		end
 			if (saddress == 16'h0380)
@@ -99,9 +99,9 @@ always @(posedge srd)
 begin
     if (saddress == 16'h0390) 
 	
-       if (B==2'b11) begin  //jeszcze sprawdzić to
+     //  if (B == 2'b11) begin  //jeszcze sprawdzić to
 	    sdata_out_s <= W[31:0];
-        end
+     //   end
     
 		else if (saddress == 16'h03A0) 
 		
@@ -165,7 +165,7 @@ always @(posedge clk) begin
 		done = 1'b1;		
 		B = 2'b11;
         operation_count <= operation_count + 1;
-		state<=4;
+		state<=IDLE;
            
         end
     endcase
