@@ -17,7 +17,7 @@
 #define SYSFS_FILE_ONES "/sys/kernel/sykt/rabl"
 
 // oby nie było błędów z kompilacją i z kolejnoscią, definiuje metody na początku
-unsigned int read_from_file(char *);
+unsigned long read_from_file(char *);
 int write_to_file(char *, unsigned long);
 struct multiplication_result multiply(unsigned long, unsigned long);
 int test_module();
