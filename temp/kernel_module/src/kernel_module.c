@@ -41,12 +41,16 @@ static int rabb;
 static bool is_hex(const char *buf, size_t count) {
     for (size_t i = 0; i < count; ++i) {
         char c = buf[i];
-            if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+        if (c == '\n' || c == '\0') { // Jeśli napotkano koniec linii lub koniec ciągu, zakończ pętlę teraz powinny widzieć koniec linii 
+            break;
+        }
+        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
             return false;
         }
     }
     return true;
 }
+
 
 static ssize_t raba1_store(struct kobject *kobj,struct kobj_attribute *attr,const char *buf, size_t count)
 {

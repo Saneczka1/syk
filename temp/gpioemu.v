@@ -99,9 +99,9 @@ always @(posedge srd)
 begin
     if (saddress == 16'h0390) 
 	
-     //  if (done) begin  //jeszcze sprawdzić to
+       if (B == 2'b11) begin  //jeszcze sprawdzić to
 	    sdata_out_s <= W[31:0];
-      //  end
+        end
     
 		else if (saddress == 16'h03A0) 
 		
@@ -136,7 +136,7 @@ always @(posedge clk) begin
 			temp_result ={25'h0, A1};
             for (integer i = 0; i < 24; i = i + 1)
 			begin
-			if(i!=1) begin
+			if(i!=0) begin
 			      temp_result= temp_result<<1;
 				  end
                 if (A2[i]) begin
