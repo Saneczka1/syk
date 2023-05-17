@@ -75,21 +75,19 @@ module gpioemu(n_reset,
 
     always @(posedge swr) 
 	begin   
-			if (saddress == 16'h03A0 ) 
-		begin
-			ready <= 1'b0;
-			done =0;
-			valid =1'b1;
-			B = 2'b01;
-			state <= IDLE;
-			gpio_out_s <= gpio_out_s + 1; //licznik
-		end
+			
 			if (saddress == 16'h0380)
 			begin	// adres pierwszego argumentu
 			A1 <= sdata_in;
 			end
     else if (saddress == 16'h0388)begin // adres drugiego argumentu
 		A2 <= sdata_in;
+        ready <= 1'b0;
+			done =0;
+			valid =1'b1;
+			B = 2'b01;
+			state <= IDLE;
+			gpio_out_s <= gpio_out_s + 1; //licznik
 		end
 	end
 

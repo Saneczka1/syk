@@ -121,14 +121,14 @@ struct multiplication_result multiply(unsigned int arg1, unsigned int arg2){
         
         if (readb == 3 && readw != 0 ){l++;}
     
-        if (readb == 0 )    /// poprawiem trzeba stestować
+      /*  if (readb == 0 )    
             {
             printf("result cannot be represented in 32 bits/n" );    
             break;
         }
 
         if (k == 20 ){ break;}
-        k++;
+        k++;*/
     }
    
     struct multiplication_result result;
