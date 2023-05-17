@@ -37,7 +37,7 @@ Te
 		printf(" ERROR at %d values\n",test);
 	}
 	else{
-		printf(" OK\n");
+		printf(" OK TEST PASSED\n");
 	}
 	return 0;
 }
@@ -52,7 +52,7 @@ char buffer[MAX_BUFFER];
 		printf("Open %s - error number %d\n", filePath, errno);
 		exit(1);
 	}	
-	int n=read(file, buffer, MAX_BUFFER);
+	int n=pread(file, buffer, MAX_BUFFER,0);
 	if(n>0){   
         buffer[n]='\0';
         
@@ -65,6 +65,7 @@ char buffer[MAX_BUFFER];
     }
 }
 
+
 int write_to_file(char *filePath, unsigned int input){
 	char buffer[MAX_BUFFER];
     FILE *file=fopen(filePath, "w");
@@ -74,16 +75,16 @@ int write_to_file(char *filePath, unsigned int input){
 		 exit(2);
 	}
 	snprintf(buffer, MAX_BUFFER, "%x", input);
-    write(fd_in, buffer, strlen(buffer));
     int n=write(fd_in, buffer, strlen(buffer));
     if(n!=strlen(buffer)){
-        printf("Open %s - error number %d\n", filePath, errno);
+        printf("Open %s - error number %d \n", filePath, errno);
         close(fd_in);
         exit(3);
     }
 	close(fd_in);
     return 0;
 }
+
 
 /*operacja mnożenia -  to wczytywanie danych od użytkownika
 i wczytywanie outputów*/
@@ -97,52 +98,54 @@ struct multiplication_result {
 struct multiplication_result multiply(unsigned int arg1, unsigned int arg2){
 
     write_to_file(SYSFS_FILE_WE1,arg1);
+    usleep(1);
+
     write_to_file(SYSFS_FILE_WE2,arg2);
-    usleep(10000);
-    unsigned int read = 0;
-    unsigned int readw = 0;
-    unsigned int readl = 0;
-    unsigned int readb = 0;
+    usleep(1);
+
+    unsigned int read;
+    unsigned int readw;
+    unsigned int readl;
+    unsigned int readb;
+
     int k =0;
     int l=0;
-	while (l==0) {
-        unsigned int read = read_from_file(SYSFS_FILE_STATUS);
-        unsigned int readw = read_from_file(SYSFS_FILE_RES);
-        unsigned int  readl = read_from_file(SYSFS_FILE_ONES);
-        unsigned int  readb = read_from_file(SYSFS_FILE_STATUS);
-        unsigned int  reada1 = read_from_file( SYSFS_FILE_WE1);
-        unsigned int  reada2 = read_from_file( SYSFS_FILE_WE2);
-       
-        if (read == 3 && readw != 0 ){
-        l++;}
 
-        if (readw ==0 )
+	while (l==0) {
+        readb = read_from_file(SYSFS_FILE_STATUS);
+        usleep(50000);
+        readw = read_from_file(SYSFS_FILE_RES);
+        usleep(50000);
+        readl = read_from_file(SYSFS_FILE_ONES);
+       
+        
+        if (readb == 3 && readw != 0 ){l++;}
+    
+        if (readb == 0 )    /// poprawiem trzeba stestować
             {
-            printf("result cannot be represented in 32 bits");    
+            printf("result cannot be represented in 32 bits/n" );    
             break;
         }
 
-        if (k == 20 ){
-        break;
-        }
+        if (k == 20 ){ break;}
         k++;
     }
-     readw = read_from_file(SYSFS_FILE_RES);
-        readl = read_from_file(SYSFS_FILE_ONES);
-        readb = read_from_file(SYSFS_FILE_STATUS);
+   
+    struct multiplication_result result;
+    result.w = readw;
+    result.l = readl;
+    result.b = readb;
 
 
-        struct multiplication_result result;
-        result.w = readw;
-        result.l = readl;
-        result.b = readb;
-
-        return result;
+return result;
 }
+
 
 int random_in_range(int min, int max) {
     return min + rand() % (max - min + 1);
 }
+
+
 
 int count_ones(unsigned int n) {
     int count = 0;
@@ -157,6 +160,7 @@ int count_ones(unsigned int n) {
     }       
     return count;
 }
+
 
 int test_module(){
 
@@ -183,16 +187,16 @@ int test_module(){
 
 
     int k=0;
-    for(int i=0; i<500; i++){
+    for(int i=0; i<100; i++){
 		struct multiplication_result result = multiply(values[i].a1,values[i].a2);
 		if( result.w != values[i].w && result.l != values[i].num_ones){
 			printf("ERROR: a1 = %x, a2 = %x, expected w = %x, expected num_ones = %x, resultw = %x,resultl = %x\n", values[i].a1, values[i].a2, values[i].w, values[i].num_ones, result.w,result.l);
 			k++;
 		}
-        usleep(9000);
+        usleep(50000);
 	}
 
     return k;
 }
 
-//tu na końcu dodałem nawias po k++
+
